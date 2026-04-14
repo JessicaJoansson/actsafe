@@ -111,6 +111,27 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 body {
   background-color:#1F2A44;
 }
+/*placering av bilder, text och bakgrundsfärg för att undvika överlapp*/
+#scene-container {
+    position: relative;
+    z-index: 5; /* Bild/Video ovanför bakgrunden */
+}
+
+#scene-img,
+#scene-video {
+    position: relative;
+    z-index: 5;
+}
+
+body.full {
+    z-index: 1; /* Bakgrundsläge */
+}
+
+#passages {
+    position: relative;
+    z-index: 10; /* Texten ska ligga över allt */
+}
+
 
 /* Mobilanpassning*/
 #scene-container {
@@ -302,7 +323,21 @@ $(document).on(':passagerender', function (ev) {
 
     if (tags.includes("silence")) stopAllAudio();
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-passagedata pid="1" name="Passage utan namn" tags="bg1" position="800,325" size="100,100">&lt;h1&gt;Väkommen till ACT SAFE&lt;/h1&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-passagedata pid="1" name="Passage utan namn" tags="full bg1" position="800,325" size="100,100">
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;h1&gt;Väkommen till ACT SAFE&lt;/h1&gt;
 Här kommer du att presenteras med olika scenarier som kan och har uppstått inom olika industrier.
 Målet med utbildningen är att du ska få de verktyg du behöver för att kunna analysera, agera och rapportera risker både när det gäller förhållanden och ageranden.
 Många tillbud (hoppsan, det var nära ögat..) kan leda till en olycka (ajdå, där bröt jag benet)
