@@ -221,30 +221,33 @@ $(document).on(':storyready', function () {
    MEDIA-LISTA (bilder + video)
    ============================================================ */
 window.sceneMedia = {
-    "bg1":  { type: "image", url: "img/logga3.png" },
+    "bg1":  { type: "image", url: "img/fabrik.png" },
   
-    "vid1": { type: "video", url: "video/intro.mp4" }
+    "vid1": { type: "video", url: "video/fallstege.mp4" }
 };
 
+
 /* ============================================================
-   PASSAGERENDER: välj layout + media
+   PASSAGERENDER: välj layout + media + textbox + ljud
    ============================================================ */
 $(document).on(':passagerender', function (ev) {
-    console.log("MEDIA SYSTEM RUNNING");
+    console.log("MEDIA + TEXTBOX + AUDIO SYSTEM RUNNING");
 
     const tags = ev.passage.tags;
 
-    /* Layout-taggar */
+    /* ============================
+       LAYOUT-TAGGAR
+       ============================ */
     const isFull = tags.includes("full");
     const isContainer = tags.includes("container");
 
-    /* Media-taggar (bgX eller vidX) */
+    /* ============================
+       MEDIA-TAGGAR
+       ============================ */
     const mediaTag = tags.find(t => window.sceneMedia[t]);
     const media = mediaTag ? window.sceneMedia[mediaTag] : null;
 
-    /* ============================
-       FULL-LÄGE (bakgrund)
-       ============================ */
+    /* FULL-LÄGE */
     if (isFull) {
         $('body').addClass('full');
         $('#scene-container').hide();
@@ -258,14 +261,10 @@ $(document).on(':passagerender', function (ev) {
         } else {
             $('body').css('background-image', 'none');
         }
-
-        return;
     }
 
-    /* ============================
-       CONTAINER-LÄGE
-       ============================ */
-    if (isContainer) {
+    /* CONTAINER-LÄGE */
+    else if (isContainer) {
         $('body').removeClass('full');
         $('body').css('background-image', 'none');
 
@@ -284,100 +283,32 @@ $(document).on(':passagerender', function (ev) {
         } else {
             $('#scene-container').hide();
         }
+    }
 
-        return;
+    /* INGEN LAYOUT */
+    else {
+        $('body').removeClass('full');
+        $('body').css('background-image', 'none');
+        $('#scene-container').hide();
     }
 
     /* ============================
-       INGEN LAYOUT
+       TEXTBOX
        ============================ */
-    $('body').removeClass('full');
-    $('body').css('background-image', 'none');
-    $('#scene-container').hide();
-});
-	/*=============================================
-       STÄNGER AV TEXTRUTAN
-    ===============================================*/
-	$(document).on(':passagerender', function (ev) {
-    const tags = ev.passage.tags;
+    if ($('#text-box').length === 0) {
+        $('body').append('<div id="text-box"></div>');
+    }
 
     if (tags.includes("notextbox")) {
         $('#text-box').hide();
     } else {
         $('#text-box').show();
-    }
-});
-
-/* ============================================================
-   TEXTBOX SYSTEM
-   ============================================================ */
-
-if ($('#text-box').length === 0) {
-    $('body').append('<div id="text-box"></div>');
-}
-
-if (tags && tags.indexOf("notextbox")) {
-    $('#text-box').hide();
-} else {
-    $('#text-box').show();
-    $('#text-box').html(ev.content);
-}
-
-
-/* ============================================================
-   LJUDSYSTEM 
-   ============================================================ */
-
-window.audio = {
-    current: null,
-    ambient: {
-        "ambient1": "sound/background.mp3"
-    },
-    sfx: {
-        "swords": "sound/swords.mp3"
-    }
-};
-
-window.playAmbient = function (key) {
-    console.log("Playing ambient:", key);
-
-    if (window.audio.current) {
-        window.audio.current.pause();
-        window.audio.current = null;
+        $('#text-box').html(ev.content);
     }
 
-    const url = window.audio.ambient[key];
-    if (!url) return;
-
-    const audio = new Audio(url);
-    audio.loop = true;
-    audio.volume = 0.4;
-    audio.play();
-
-    window.audio.current = audio;
-};
-
-window.playSFX = function (key) {
-    console.log("Playing SFX:", key);
-
-    const url = window.audio.sfx[key];
-    if (!url) return;
-
-    const audio = new Audio(url);
-    audio.volume = 1.0;
-    audio.play();
-};
-
-window.stopAllAudio = function () {
-    if (window.audio.current) {
-        window.audio.current.pause();
-        window.audio.current = null;
-    }
-};
-
-$(document).on(':passagerender', function (ev) {
-    const tags = ev.passage.tags;
-
+    /* ============================
+       LJUD
+       ============================ */
     const ambientTag = tags.find(t => t.startsWith("ambient"));
     if (ambientTag) playAmbient(ambientTag);
 
@@ -386,7 +317,7 @@ $(document).on(':passagerender', function (ev) {
 
     if (tags.includes("silence")) stopAllAudio();
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
     &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga3.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
@@ -418,8 +349,8 @@ Hur går du till väga?
 [[Frågar en kollega| frågar]]
 [[Kontrollerar märkning och säkerhetsdatablad|kontrollera]]
 [[Använder skyddsutrustning och testar en av flaskorna|skyddsutrustning]]
-[[Kontaktar chef/ansvarig|kontaktar]]</tw-passagedata><tw-passagedata pid="4" name="start" tags="" position="800,300" size="100,100">[[kemikalier]]
-[[hög höjd]]</tw-passagedata><tw-passagedata pid="5" name="stegen" tags="" position="300,200" size="100,100">Kanske inte det bästa valet.
+[[Kontaktar chef/ansvarig|kontaktar]]</tw-passagedata><tw-passagedata pid="4" name="start" tags="bg1 container" position="800,300" size="100,100">[[kemikalier]]
+[[hög höjd]]</tw-passagedata><tw-passagedata pid="5" name="stegen" tags="vid1 container" position="300,200" size="100,100">Kanske inte det bästa valet.
 Om du ska utföra arbete på stege ska det kunna göras på ett säkert sätt.
 Arbetsgivaren ska se till att stegar högre än 3m är stadgade eller förankrade så att de inte kan glida under användning.
 Oftast är rutinerade anställda de som vet hur arbetsuppgifter utförs på bästa sätt, men de kan bli &quot;hemmablinda&quot; och nya ögon kan bidra med nya perspektiv. Våga ifrågasätta, både för din men även dina medarbetares skull.
