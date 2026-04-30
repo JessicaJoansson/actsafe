@@ -245,6 +245,7 @@ $(document).on(':storyready', function () {
    ============================================================ */
 window.sceneMedia = {
     "bg1":  { type: "image", url: "img/fabrik.png" },
+  "bg2":  { type: "image", url: "img/kemikalier.png" },
   
     "vid1": { type: "video", url: "video/fallstege.mp4" }
 };
@@ -382,7 +383,7 @@ $(document).on(':passagerender', function (ev) {
         }
     }
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
     &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga3.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
@@ -400,7 +401,7 @@ Hur gör du?
 Ställer upp [[stegen]] och klättar upp, stegen är ju närmast.
 Ber din arbetskamrat hissa upp dig med [[trucken]]
 Hämtar en [[skylift]]
-Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta [[stegen]] men var försiktig.&quot;</tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="" position="1450,350" size="100,100">Kemikaliespill i produktion
+Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta [[stegen]] men var försiktig.&quot;</tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2" position="1450,350" size="100,100">Kemikaliespill i produktion
 
 Du arbetar i en industrimiljö där kemikalier används vid rengöring och underhåll.
 Under ett arbetspass upptäcker du ett mindre spill av en vätska under en maskin. I närheten finns flera kemikaliebehållare, men det är oklart vilken som har läckt.
@@ -470,60 +471,70 @@ Om det inte finns ett internt system med riskanalyser så kan man hämta mallar 
 Prevent: https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fwww.prevent.se%2Fglobalassets%2F.prevent.se%2Fmallar-och-exempel%2Friskbedomning-mall.xlsx&amp;wdOrigin=BROWSELINK
 eller gå in på: https://www.prevent.se/ där finns fler listor beroende på vad som ska riskanalyseras.
 
-[[test]]</tw-passagedata><tw-passagedata pid="9" name="test" tags="" position="100,550" size="100,100">[[start]] </tw-passagedata><tw-passagedata pid="10" name="Torkar upp spillet direkt" tags="" position="1225,575" size="100,100">Torkar upp direkt (FEL)
+[[test]]</tw-passagedata><tw-passagedata pid="9" name="test" tags="" position="100,550" size="100,100">[[start]] </tw-passagedata><tw-passagedata pid="10" name="Torkar upp spillet direkt" tags="" position="1225,575" size="100,100">Torkar upp direkt - Sämsta valet
 
-Du torkar upp vätskan utan att veta vad det är.
-Kort därefter börjar du känna irritation i huden och en stickande lukt.
+Du hanterar ett spill utan att veta vad ämnet innehåller.
 
-ANALYS OCH ANSVAR
+Vid arbete med kemikalier ska riskerna vara kända innan arbetet påbörjas.
+Att direkt hantera ett okänt ämne kan innebära exponering via hud, inandning eller ögon.
 
-Att hantera ett kemikaliespill utan att veta ämnets egenskaper innebär risk för exponering via hud eller inandning.
-Enligt AFS 2023:10 ska risker identifieras och bedömas innan arbete påbörjas.
-Utan denna information kan fel åtgärder vidtas, vilket kan leda till skador.
-Arbetsgivaren ska säkerställa att rutiner finns för hantering av kemikaliespill.
-Du som anställd ska inte hantera okända ämnen utan att först ta reda på riskerna.
-</tw-passagedata><tw-passagedata pid="11" name="Tar på handskar och försöker rengöra" tags="" position="1400,575" size="100,100">Rengör med skydd (HALVRÄTT)
+Arbetsgivaren ska se till att kemikalier är märkta och att riskbedömningar finns.
+Om information saknas ska arbetet inte utföras.
 
-Du tar på dig handskar och försöker torka upp spillet.
-Du minskar risken, men vet fortfarande inte vilken kemikalie det är.
+Fråga chefen eller ditt skyddsombud om det finns en [[riskanalys]].
+Om det inte finns någon är det viktigt att arbetet stoppas tills riskerna är utredda.
 
-ANALYS
+Största riskerna:
 
-Skyddsutrustning som handskar är viktig, men räcker inte om kemikalien är okänd.
-Vissa ämnen kan vara:
-	•	Frätande
-	•	Giftiga vid inandning
-	•	Allergiframkallande
-Rätt åtgärd kräver kunskap om ämnet.
+Hudkontakt kan orsaka skador
+Inandning av ångor kan vara farligt
+Stänk kan nå ögon
+Okänd kemikalie kan ge oväntade reaktioner
+Spill kan spridas vidare</tw-passagedata><tw-passagedata pid="11" name="Tar på handskar och försöker rengöra" tags="" position="1400,575" size="100,100">Tar på handskar och rengör - Bättre val men inte rätt
 
-TÄNK PÅ ATT
+Skyddsutrustning minskar risken, men du vet fortfarande inte vilken kemikalie du hanterar.
 
-Beroende på kemikalie kan följande krävas:
-	•	Skyddshandskar
-	•	Skyddsglasögon
-	•	Skyddskläder
-	•	Andningsskydd
-	•	Absorberande material för spill
-Ventilation är också viktig för att minska exponering.</tw-passagedata><tw-passagedata pid="12" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="" position="1600,575" size="100,100">Kontrollerar information (RÄTT)
+Olika kemikalier kräver olika typer av skydd.
+Handskar skyddar inte mot alla ämnen, och vissa risker kan finnas kvar, till exempel via inandning.
 
-Du identifierar vilken kemikalie som kan ha läckt och kontrollerar märkning samt säkerhetsdatablad.
-Du får information om risker och hur spillet ska hanteras på ett säkert sätt.
+Innan arbetet fortsätter behöver du veta vad ämnet är och vilka risker som finns.
 
-ANALYS
+Fråga chefen eller kontrollera om det finns en [[riskanalys]] och säkerhetsdatablad.
 
-Säkerhetsdatablad innehåller information om:
-	•	Risker
-	•	Skyddsutrustning
-	•	Åtgärder vid spill
-En korrekt riskbedömning gör att rätt åtgärder kan vidtas och risken för skador minskar.</tw-passagedata><tw-passagedata pid="13" name="Spärrar av området och kontaktar ansvarig" tags="" position="1775,575" size="100,100">Rapporterar och spärrar av (RÄTT)
+Största riskerna:
 
-Du spärrar av området och kontaktar ansvarig.
-Arbetet stoppas tills kemikalien identifierats och riskerna bedömts.
+Fel skyddsutrustning används
+Inandning av farliga ämnen
+Otillräcklig ventilation
+Falsk trygghet vid användning av skydd</tw-passagedata><tw-passagedata pid="12" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="" position="1600,575" size="100,100">Kontrollerar information - Bra val
+Du tar reda på vilken kemikalie som har spillts genom att kontrollera märkning och säkerhetsdatablad.
 
-ANALYS
+Genom att identifiera ämnet kan du förstå vilka risker som finns och hur det ska hanteras på ett säkert sätt.
 
-Att stoppa arbetet och rapportera är en viktig del av det systematiska arbetsmiljöarbetet.
-Det minskar risken för att fler exponeras för farliga ämnen.</tw-passagedata><tw-passagedata pid="14" name="Widget" tags="" position="975,175" size="100,100">&lt;&lt;widget &quot;storyStatus&quot;&gt;&gt;
+En riskanalys hjälper till att avgöra vilka åtgärder som behövs, till exempel rätt skyddsutrustning och hantering av spill.
+
+Detta bör kontrolleras:
+
+Vilken kemikalie det är
+Vilka risker ämnet innebär
+Vilken skyddsutrustning som krävs
+Hur spillet ska saneras
+Om ventilationen är tillräcklig
+
+När du har rätt information kan arbetet utföras på ett säkrare sätt.</tw-passagedata><tw-passagedata pid="13" name="Spärrar av området och kontaktar ansvarig" tags="" position="1775,575" size="100,100">Spärrar av och rapporterar - Bra val
+
+Du minskar risken för att fler personer exponeras genom att spärra av området.
+
+Att rapportera händelsen är en viktig del av arbetsmiljöarbetet.
+Det gör att problemet kan åtgärdas på rätt sätt och att liknande situationer kan förebyggas.
+
+Arbetet bör inte återupptas förrän riskerna är identifierade och hanterade.
+
+Största riskerna som undviks:
+
+Fler personer utsätts för kemikalien
+Felaktig hantering av spill
+Brist på kontroll över situationen</tw-passagedata><tw-passagedata pid="14" name="Widget" tags="" position="975,175" size="100,100">&lt;&lt;widget &quot;storyStatus&quot;&gt;&gt;
     &lt;&lt;set _id = $args[0]&gt;&gt;
     &lt;&lt;set _label = $args[1]&gt;&gt;
     &lt;&lt;set _status = window.getStoryStatus(_id)&gt;&gt;
