@@ -104,50 +104,45 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="ActSafe" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="CA7DD5D1-ADCD-4409-A5F3-715A68496666" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* Import av font-familj*/
+	<tw-storydata name="ActSafe" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="CA7DD5D1-ADCD-4409-A5F3-715A68496666" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* Import av font-familj */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap');
 
-
+/* Grundfärg */
 body {
   background-color:#1F2A44;
 }
-/*placering av bilder, text och bakgrundsfärg för att undvika överlapp*/
+
+/* ============================
+   MEDIA-CONTAINER
+============================ */
 #scene-container {
     position: relative;
-    z-index: 5; /* Bild/Video ovanför bakgrunden */
+    z-index: 5;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 #scene-img,
 #scene-video {
     position: relative;
     z-index: 5;
-}
-
-body.full {
-    z-index: 1; /* Bakgrundsläge */
-}
-
-#passages {
-    position: relative;
-    z-index: 10; /* Texten ska ligga över allt */
-}
-
-.logo-header {
-    text-align: center;
-    padding-top: 20px;
-}
-
-.logo {
-    width: 400px; /* justera efter smak */
-    height: auto;
-}
-
-/* Mobilanpassning*/
-#scene-container {
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* ============================
+   FULLSKÄRMSLÄGE
+============================ */
+body.full {
+    z-index: 1;
+    min-height: 100vh;
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-color: #1F2A44;
 }
 
 /* Mobil: använd cover */
@@ -157,13 +152,33 @@ body.full {
         background-position: center 20%;
     }
 }
-#scene-img,
-#scene-video {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+
+/* ============================
+   PASSAGE-TEXT
+============================ */
+#passages {
+    position: relative;
+    z-index: 10;
 }
-/*Utformning och placering av textruta*/
+
+body, #passages, .passage {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Rubriker */
+h1, h2, h3, h4 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 0.5em;
+    margin-bottom: 0.3em;
+}
+
+/* ============================
+   TEXTBOX
+============================ */
 #text-box {
     position: fixed;
     bottom: 0;
@@ -174,61 +189,56 @@ body.full {
     padding: 20px;
     font-size: 20px;
     line-height: 1.5;
-    z-index: 9999; /* över allt */
+    z-index: 9999;
     box-sizing: border-box;
 }
 
-
-body.full {
-    min-height: 100vh;
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-color: #1F2A44;
-}
-
-/*Font-familj brödtext*/
-body, #passages, .passage {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 18px;
-    line-height: 1.6;
-}
-
-/*Font-familj rubrik*/
-h1, h2, h3, h4 {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-top: 0.5em;
-    margin-bottom: 0.3em;
-  
-}
-/*Färger som visar status på story*/
+/* ============================
+   STORYSTATUS-KNAPPAR
+============================ */
 .story-status {
-    padding: 10px 14px;
-    border-radius: 6px;
-    display: inline-block;
-    margin: 6px 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: block;
+    margin: 10px auto;
     font-weight: bold;
-    color: #000;
-    width: 250px;
+    text-align: center;
+    width: 260px;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
+.story-status a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+}
+
+/* Ej påbörjad */
 .status-not-started {
-    background-color: #bfbfbf; /* grå */
+    background-color: #bfbfbf;
+    color: #000;
 }
 
+/* Pågående */
 .status-in-progress {
-    background-color: #ffeb3b; /* gul */
+    background-color: #ffeb3b;
+    color: #000;
 }
 
+/* Klar */
 .status-completed {
-    background-color: #4caf50; /* grön */
+    background-color: #4caf50;
     color: white;
+}
+
+/* Hover-effekt */
+.story-status:hover {
+    filter: brightness(0.9);
 }
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">/* ============================================================
    SKAPA MEDIA-CONTAINER (bild + video)
-   ============================================================ */
+============================================================ */
 $(document).on(':storyready', function () {
     console.log("CREATING MEDIA CONTAINER");
 
@@ -242,32 +252,44 @@ $(document).on(':storyready', function () {
 
 /* ============================================================
    MEDIA-LISTA (bilder + video)
-   ============================================================ */
+============================================================ */
 window.sceneMedia = {
     "bg1":  { type: "image", url: "img/fabrik.png" },
-  "bg2":  { type: "image", url: "img/kemikalier.png" },
-  
+    "bg2":  { type: "image", url: "img/kemikalier.png" },
     "vid1": { type: "video", url: "video/fallstege.mp4" }
 };
 
+/* ============================================================
+   STORY PROGRESS FUNKTIONER
+============================================================ */
+window.setStoryStatus = function (storyId, status) {
+    const progress = JSON.parse(localStorage.getItem("storyProgress") || "{}");
+    progress[storyId] = status;
+    localStorage.setItem("storyProgress", JSON.stringify(progress));
+};
+
+window.getStoryStatus = function (storyId) {
+    const progress = JSON.parse(localStorage.getItem("storyProgress") || "{}");
+    return progress[storyId] || "not-started";
+};
 
 /* ============================================================
-   PASSAGERENDER: välj layout + media + textbox + ljud
-   ============================================================ */
+   PASSAGERENDER: layout + media + textbox + ljud + progress
+============================================================ */
 $(document).on(':passagerender', function (ev) {
-    console.log("MEDIA + TEXTBOX + AUDIO SYSTEM RUNNING");
+    console.log("MEDIA + TEXTBOX + AUDIO + PROGRESS SYSTEM RUNNING");
 
     const tags = ev.passage.tags;
 
     /* ============================
        LAYOUT-TAGGAR
-       ============================ */
+    ============================ */
     const isFull = tags.includes("full");
     const isContainer = tags.includes("container");
 
     /* ============================
        MEDIA-TAGGAR
-       ============================ */
+    ============================ */
     const mediaTag = tags.find(t => window.sceneMedia[t]);
     const media = mediaTag ? window.sceneMedia[mediaTag] : null;
 
@@ -317,22 +339,23 @@ $(document).on(':passagerender', function (ev) {
     }
 
     /* ============================
-       TEXTBOX
-       ============================ */
+       TEXTBOX (ALTERNATIV 1)
+       Rendera INTE text i textbox om passagen har taggen "notextbox"
+    ============================ */
     if ($('#text-box').length === 0) {
         $('body').append('<div id="text-box"></div>');
     }
 
     if (tags.includes("notextbox")) {
-        $('#text-box').hide();
+        $('#text-box').hide();   // Dölj textboxen helt
     } else {
         $('#text-box').show();
-        $('#text-box').html(ev.content);
+        $('#text-box').html(ev.content);  // Visa passageinnehåll i textboxen
     }
 
     /* ============================
        LJUD
-       ============================ */
+    ============================ */
     const ambientTag = tags.find(t => t.startsWith("ambient"));
     if (ambientTag) playAmbient(ambientTag);
 
@@ -340,50 +363,46 @@ $(document).on(':passagerender', function (ev) {
     if (sfxTag) playSFX(sfxTag.replace("sfx-", ""));
 
     if (tags.includes("silence")) stopAllAudio();
-});
 
-/* ============================
-   STORY PROGRESS FÄRGMARKERINGAR
-============================ */
-
-// Sätt status: "not-started", "in-progress", "completed"
-window.setStoryStatus = function (storyId, status) {
-    const progress = JSON.parse(localStorage.getItem("storyProgress") || "{}");
-    progress[storyId] = status;
-    localStorage.setItem("storyProgress", JSON.stringify(progress));
-};
-
-// Hämta status
-window.getStoryStatus = function (storyId) {
-    const progress = JSON.parse(localStorage.getItem("storyProgress") || "{}");
-    return progress[storyId] || "not-started";
-};
-
-// När en passage renderas
-$(document).on(':passagerender', function (ev) {
-    const tags = ev.passage.tags;
-
-    // Hitta story-taggen: story:fallrisk, story:kemikalier osv.
+    /* ============================
+       STORY PROGRESS
+    ============================ */
     const storyTag = tags.find(t => t.startsWith("story:"));
     if (storyTag) {
         const storyId = storyTag.replace("story:", "");
-
-        // Om den inte är klar → sätt till "in-progress"
-        if (getStoryStatus(storyId) !== "completed") {
-            setStoryStatus(storyId, "in-progress");
+        if (window.getStoryStatus(storyId) !== "completed") {
+            window.setStoryStatus(storyId, "in-progress");
         }
     }
 
-    // Om passage har taggen "story-end" → markera som klar
     if (tags.includes("story-end")) {
         const storyTag = tags.find(t => t.startsWith("story:"));
         if (storyTag) {
             const storyId = storyTag.replace("story:", "");
-            setStoryStatus(storyId, "completed");
+            window.setStoryStatus(storyId, "completed");
         }
     }
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
+
+/* ============================================================
+   STORYSTATUS-MAKRO (knapparna)
+============================================================ */
+Macro.add("storyStatus", {
+    handler: function () {
+        const id = this.args[0];
+        const label = this.args[1];
+        const status = window.getStoryStatus(id);
+        const cssClass = "status-" + status;
+
+        const linkHtml = `<div class="story-status ${cssClass}">
+                            <a href="javascript:void(0)" onclick="SugarCube.Engine.play('${id}')">${label}</a>
+                          </div>`;
+
+        // Viktigt: se till att det verkligen blir HTML, inte text
+        $(this.output).append($(linkHtml));
+    }
+});
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="blue"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="red"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
     &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga3.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
@@ -396,12 +415,12 @@ Reflektera gärna hur det ser ut på er arbetsplats, vet du hur man anmäler ett
 Tillsammans skapar vi en säkrare arbetsplats.
 
 [[start]]
-&lt;/body&gt;</tw-passagedata><tw-passagedata pid="2" name="fall" tags="story:fallrisk" position="500,200" size="100,100">Du ska byta ett filter i ett ventilationsrör, röret sitter 3m upp vid väggen. Det är första gången du ska utföra arbetsuppgiften. Det finns en instruktion på hur filterbytet går till som är enkel att följa, men saknas vilket redskap som ska användas för att nå upp till filtret.
+&lt;/body&gt;</tw-passagedata><tw-passagedata pid="2" name="fall" tags="story:fall" position="500,200" size="100,100">Du ska byta ett filter i ett ventilationsrör, röret sitter 3m upp vid väggen. Det är första gången du ska utföra arbetsuppgiften. Det finns en instruktion på hur filterbytet går till som är enkel att följa, men saknas vilket redskap som ska användas för att nå upp till filtret.
 Hur gör du?
 Ställer upp [[stegen]] och klättar upp, stegen är ju närmast.
 Ber din arbetskamrat hissa upp dig med [[trucken]]
 Hämtar en [[skylift]]
-Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta [[stegen]] men var försiktig.&quot;</tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2" position="1450,350" size="100,100">Kemikaliespill i produktion
+Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta [[stegen]] men var försiktig.&quot;</tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2 story:kemikalier" position="1450,350" size="100,100">Kemikaliespill i produktion
 
 Du arbetar i en industrimiljö där kemikalier används vid rengöring och underhåll.
 Under ett arbetspass upptäcker du ett mindre spill av en vätska under en maskin. I närheten finns flera kemikaliebehållare, men det är oklart vilken som har läckt.
@@ -413,17 +432,14 @@ Hur agerar du?
 [[Torkar upp spillet direkt]]
 [[Tar på handskar och försöker rengöra]]
 [[Identifierar kemikalien och kontrollerar säkerhetsdatablad]]
-[[Spärrar av området och kontaktar ansvarig]]</tw-passagedata><tw-passagedata pid="4" name="start" tags="bg1 container" position="800,300" size="100,100">Här väljer du var du vill börja
-Bilder och filmer visar specifika risker och händelser, men det kan finnas andra risker än den som är i fokus. Kan du ser vilka?
+[[Spärrar av området och kontaktar ansvarig]]</tw-passagedata><tw-passagedata pid="4" name="start" tags="bg1 container" position="800,300" size="100,100">&lt;&lt;nobr&gt;&gt;
+Här väljer du var du vill börja, varje del innehåller en specifik risk, men bilderna och filmerna kopplade till risken kan ibland även innehålla andra risker. Kan du se några fler risker? 
 &lt;h2&gt;Risköversikt&lt;/h2&gt;
 
-&lt;&lt;storyStatus &quot;fall&quot; &quot;Fall&quot;&gt;&gt;
+&lt;&lt;storyStatus &quot;fall&quot; &quot;Fallrisk&quot;&gt;&gt;
 &lt;&lt;storyStatus &quot;kemikalier&quot; &quot;Kemikalier&quot;&gt;&gt;
-&lt;&lt;storyStatus &quot;truck&quot; &quot;Truckkörning&quot;&gt;&gt;
-&lt;&lt;storyStatus &quot;ergonomi&quot; &quot;Ergonomi&quot;&gt;&gt;
-
-[[kemikalier]]
-[[fall]]</tw-passagedata><tw-passagedata pid="5" name="stegen" tags="vid1 container" position="300,200" size="100,100">Kanske inte det bästa valet.
+&lt;&lt;/nobr&gt;&gt;
+</tw-passagedata><tw-passagedata pid="5" name="stegen" tags="vid1 container story:end" position="300,200" size="100,100">Kanske inte det bästa valet.
 Om du ska utföra arbete på stege ska det kunna göras på ett säkert sätt.
 Arbetsgivaren ska se till att stegar högre än 3m är stadgade eller förankrade så att de inte kan glida under användning.                            
 Oftast är rutinerade anställda de som vet hur arbetsuppgifter utförs på bästa sätt, men de kan också bli &quot;hemmablinda&quot; och nya ögon kan bidra med nya perspektiv. Våga ifrågasätta, både för din men även dina medarbetares skull.
@@ -534,17 +550,7 @@ Största riskerna som undviks:
 
 Fler personer utsätts för kemikalien
 Felaktig hantering av spill
-Brist på kontroll över situationen</tw-passagedata><tw-passagedata pid="14" name="Widget" tags="" position="975,175" size="100,100">&lt;&lt;widget &quot;storyStatus&quot;&gt;&gt;
-    &lt;&lt;set _id = $args[0]&gt;&gt;
-    &lt;&lt;set _label = $args[1]&gt;&gt;
-    &lt;&lt;set _status = window.getStoryStatus(_id)&gt;&gt;
-
-    &lt;&lt;set _class = &quot;status-&quot; + _status&gt;&gt;
-
-    &lt;div class=&quot;story-status &lt;&lt;_class&gt;&gt;&quot;&gt;
-        &lt;&lt;link _label&gt;&gt;&lt;&lt;goto _id&gt;&gt;&lt;&lt;/link&gt;&gt;
-    &lt;/div&gt;
-&lt;&lt;/widget&gt;&gt;
+Brist på kontroll över situationen</tw-passagedata><tw-passagedata pid="14" name="omöjlig att radera" tags="" position="1225,175" size="100,100">
 </tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
