@@ -478,18 +478,7 @@ Macro.add("finalTest", {
         }
     }
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;&lt;linkreplace &quot;🔊 Ljud på/av&quot;&gt;&gt;
-    &lt;&lt;if window.ambient.paused&gt;&gt;
-        &lt;&lt;run window.ambient.play()&gt;&gt;
-        Ljud på
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;run window.ambient.pause()&gt;&gt;
-        Ljud av
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/linkreplace&gt;&gt;
-
-
-&lt;body class=&quot;full&quot;&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
     &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga3.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
@@ -507,9 +496,14 @@ Tillsammans skapar vi en säkrare arbetsplats.
 Hur gör du?
 &lt;div class=&quot;choice-row&quot;&gt;
 Ställer upp [[stegen]] och klättar upp, stegen är ju närmast.
+
 Ber din arbetskamrat hissa upp dig med [[trucken]]
+
 Hämtar en[[skylift]]
-Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta[[stegen]]men var försiktig.&quot;&lt;/div&gt; </tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2 story:kemikalier container" position="1025,300" size="100,100">Kemikaliespill i produktion
+
+Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara 
+
+ta[[stegen]]men var försiktig.&quot;&lt;/div&gt; </tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2 story:kemikalier container" position="1025,300" size="100,100">Kemikaliespill i produktion
 
 Du arbetar i en industrimiljö där kemikalier används vid rengöring och underhåll.
 Under ett arbetspass upptäcker du ett mindre spill av en vätska under en maskin. I närheten finns flera kemikaliebehållare, men det är oklart vilken som har läckt.
@@ -522,7 +516,11 @@ Hur agerar du?
 [[Tar på handskar och försöker rengöra]]
 [[Identifierar kemikalien och kontrollerar säkerhetsdatablad]]
 [[Spärrar av området och kontaktar ansvarig]]
-&lt;/div&gt; </tw-passagedata><tw-passagedata pid="4" name="START" tags="bg1 container ambient-start" position="800,300" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="4" name="START" tags="bg1 container ambient-start" position="800,300" size="100,100">&lt;&lt;linkreplace &quot;Ljud: &quot; + ($ambientOn ? &quot;På&quot; : &quot;Av&quot;)&gt;&gt;
+    &lt;&lt;toggleambient&gt;&gt;
+&lt;&lt;/linkreplace&gt;&gt;
+
+&lt;&lt;nobr&gt;&gt;
 Här väljer du var du vill börja, varje del innehåller en specifik risk, men bilderna och filmerna kopplade till risken kan ibland även innehålla andra risker. Kan du se några fler risker? 
 &lt;h2&gt;Risköversikt&lt;/h2&gt;
 
@@ -1084,6 +1082,28 @@ Vad ska du göra om du får kemikalie i ögat?
 </tw-passagedata><tw-passagedata pid="59" name="Frågeformulär" tags="" position="800,425" size="100,100">&lt;a href=&quot;#&quot; onclick=&quot;window.open(&#39;https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?origin=NeoPortalPage&amp;subpage=design&amp;id=j82eIicAk0K7MxnKt-a4PTCIz5Jo45ZJly810klnbBpUNE1DSEQyQk40SFhBWDJXTVc0MVRRM1dJNS4u&amp;branchingelementid=rd0dd1ff50ff8428fb34fb9fa3b4a0662&#39;, &#39;formsPopup&#39;, &#39;width=900,height=700&#39;); return false;&quot;&gt;
     Svara i Google Forms
 &lt;/a&gt;
+</tw-passagedata><tw-passagedata pid="60" name="StoryInit" tags="" position="1000,150" size="100,100">&lt;&lt;set $ambientOn = true&gt;&gt;
+&lt;&lt;cacheaudio &quot;ambient&quot; &quot;audio/ambient.mp3&quot;&gt;&gt;
+
+
+
+
+
+</tw-passagedata><tw-passagedata pid="61" name="StoryMenu" tags="" position="1125,150" size="100,100">&lt;&lt;linkreplace &quot;Ljud: &quot; + ($ambientOn ? &quot;På&quot; : &quot;Av&quot;)&gt;&gt;
+    &lt;&lt;toggleambient&gt;&gt;
+&lt;&lt;/linkreplace&gt;&gt;
+
+
+
+</tw-passagedata><tw-passagedata pid="62" name="ToggleAmbientWidget" tags="widget" position="1300,150" size="100,100">&lt;&lt;widget &quot;toggleambient&quot;&gt;&gt;
+    &lt;&lt;if $ambientOn&gt;&gt;
+        &lt;&lt;run window.ambient.pause()&gt;&gt;
+        &lt;&lt;set $ambientOn = false&gt;&gt;
+    &lt;&lt;else&gt;&gt;
+        &lt;&lt;run window.ambient.play()&gt;&gt;
+        &lt;&lt;set $ambientOn = true&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
 </tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
