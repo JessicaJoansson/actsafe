@@ -104,108 +104,117 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<tw-storydata name="ActSafe" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="CA7DD5D1-ADCD-4409-A5F3-715A68496666" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* Import av font-familj */
+	<tw-storydata name="ActSafe" startnode="1" creator="Twine" creator-version="2.11.1" format="SugarCube" format-version="2.37.3" ifid="CA7DD5D1-ADCD-4409-A5F3-715A68496666" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ============================
+   FONTER
+============================ */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap');
 
-/* Grundfärg */
+/* ============================
+   GRUNDLAYOUT
+============================ */
 body {
-  background-color:#1F2A44;
+    background-color:#1F2A44;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+    text-align: center;
+}
+
+/* Wrapper för allt innehåll */
+#passages {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
 }
 
 /* ============================
-   MEDIA-CONTAINER
+   MEDIA-CONTAINER (bild/video)
 ============================ */
 #scene-container {
-    position: relative;
-    z-index: 5;
+    display: inline-block;
     width: 100%;
     max-width: 900px;
-    margin: 0 auto;
+    margin: 20px auto 20px auto;
     text-align: center;
 }
 
 #scene-img,
 #scene-video {
-    position: relative;
-    z-index: 5;
     width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
 }
 
 /* ============================
-   FULLSKÄRMSLÄGE
+   RUBRIKER
 ============================ */
-body.full {
-    z-index: 1;
-    min-height: 100vh;
-    background-size: contain;
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-color: #1F2A44;
-}
-
-/* Mobil: använd cover */
-@media (max-width: 768px) {
-    body.full {
-        background-size: cover;
-        background-position: center 20%;
-    }
-}
-
-/* ============================
-   PASSAGE-TEXT
-============================ */
-#passages {
-    position: relative;
-    z-index: 10;
-}
-
-body, #passages, .passage {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 18px;
-    line-height: 1.6;
-}
-
-/* Rubriker */
 h1, h2, h3, h4 {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
     letter-spacing: 0.5px;
     margin-top: 0.5em;
     margin-bottom: 0.3em;
+    color: #ffffff;
 }
 
 /* ============================
-   TEXTBOX
+   TEXT
 ============================ */
-#text-box {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 20px;
+.passage {
     font-size: 20px;
-    line-height: 1.5;
-    z-index: 9999;
-    box-sizing: border-box;
+    line-height: 1.7;
+    text-align: center;
 }
 
 /* ============================
-   STORYSTATUS-KNAPPAR
+   VAL-KNAPPAR (SugarCube)
+============================ */
+.choice-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.choice-row a.link-internal {
+    display: inline-block;
+    background-color: #3A4A6A;
+    color: #fff !important;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none !important;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: 0.25s ease;
+}
+
+.choice-row a.link-internal:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.1);
+}
+
+/* ============================
+   STORY-STATUS-KNAPPAR
 ============================ */
 .story-status {
-    padding: 12px 16px;
-    border-radius: 8px;
+    padding: 14px 20px;
+    border-radius: 10px;
     display: block;
-    margin: 10px auto;
+    margin: 15px auto;
     font-weight: bold;
     text-align: center;
     width: 260px;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: 0.25s ease;
+    font-size: 18px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 .story-status a {
@@ -214,27 +223,43 @@ h1, h2, h3, h4 {
     display: block;
 }
 
-/* Ej påbörjad */
-.status-not-started {
-    background-color: #bfbfbf;
-    color: #000;
-}
+.status-not-started { background-color: #bfbfbf; color: #000; }
+.status-in-progress { background-color: #ffeb3b; color: #000; }
+.status-completed { background-color: #4caf50; color: white; }
 
-/* Pågående */
-.status-in-progress {
-    background-color: #ffeb3b;
-    color: #000;
-}
-
-/* Klar */
-.status-completed {
-    background-color: #4caf50;
-    color: white;
-}
-
-/* Hover-effekt */
 .story-status:hover {
-    filter: brightness(0.9);
+    transform: translateY(-3px);
+    filter: brightness(1.05);
+}
+
+/* ============================
+   LJUDKNAPP I UI-BAR
+============================ */
+#sound-toggle {
+    margin-left: 10px;
+    background: #3A4A6A;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#sound-toggle:hover {
+    filter: brightness(1.2);
+}
+
+/* Färg på vanliga Twine-länkar (passage-länkar) */
+.passage a.link-internal {
+    color: #fbbf24
+ !important; /* ändra färgen här */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.passage a.link-internal:hover {
+    filter: brightness(1.2);
 }
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">// Globalt ambient-ljudobjekt
 window.ambient = new Audio("audio/ambient.wav");
@@ -263,7 +288,7 @@ $(document).on(':passagerender', function (ev) {
 $(document).on(':storyready', function () {
     console.log("CREATING MEDIA CONTAINER");
 
-    $('body').append(`
+    $('body').prepend(`
         <div id="scene-container">
             <img id="scene-img">
             <video id="scene-video" autoplay loop muted playsinline></video>
@@ -279,6 +304,11 @@ window.sceneMedia = {
     "bg2":  { type: "image", url: "img/kemikalier.png" },
 "bg3":  { type: "image", url: "img/torkar.png" },
   "bg4": { type: "image", url: "img/skylift.png"},
+  "bg5": { type: "image", url: "img/blad.png"},
+  "bg6": { type: "image", url: "img/kontakta.png"},
+  "bg7": { type: "image", url: "img/handskar.png"},
+  
+  
   
     "vid1": { type: "video", url: "video/fallstege.mp4" }
 };
@@ -448,7 +478,7 @@ Macro.add("finalTest", {
         }
     }
 });
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;&lt;linkreplace &quot;🔊 Ljud på/av&quot;&gt;&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;&lt;linkreplace &quot;🔊 Ljud på/av&quot;&gt;&gt;
     &lt;&lt;if window.ambient.paused&gt;&gt;
         &lt;&lt;run window.ambient.play()&gt;&gt;
         Ljud på
@@ -474,10 +504,11 @@ Tillsammans skapar vi en säkrare arbetsplats.
 [[start]]
 &lt;/body&gt;</tw-passagedata><tw-passagedata pid="2" name="fall" tags="story:fall" position="575,250" size="100,100">Du ska byta ett filter i ett ventilationsrör, röret sitter 3m upp vid väggen. Det är första gången du ska utföra arbetsuppgiften. Det finns en instruktion på hur filterbytet går till som är enkel att följa, men saknas vilket redskap som ska användas för att nå upp till filtret.
 Hur gör du?
+&lt;div class=&quot;choice-row&quot;&gt;
 Ställer upp [[stegen]] och klättar upp, stegen är ju närmast.
-Ber din arbetskamrat hissa upp dig med&lt;div class=&quot;choice-row&quot;&gt; [[trucken]]&lt;/div&gt;
-Hämtar en&lt;div class=&quot;choice-row&quot;&gt; [[skylift]]&lt;/div&gt;
-Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta &lt;div class=&quot;choice-row&quot;&gt;[[stegen]]&lt;/div&gt; men var försiktig.&quot;</tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2 story:kemikalier container" position="1025,300" size="100,100">Kemikaliespill i produktion
+Ber din arbetskamrat hissa upp dig med [[trucken]]
+Hämtar en[[skylift]]
+Frågar någon som har utfört jobbet förut, personen säger att hen &quot;brukar bara ta[[stegen]]men var försiktig.&quot;&lt;/div&gt; </tw-passagedata><tw-passagedata pid="3" name="kemikalier" tags="bg2 story:kemikalier container" position="1025,300" size="100,100">Kemikaliespill i produktion
 
 Du arbetar i en industrimiljö där kemikalier används vid rengöring och underhåll.
 Under ett arbetspass upptäcker du ett mindre spill av en vätska under en maskin. I närheten finns flera kemikaliebehållare, men det är oklart vilken som har läckt.
@@ -485,19 +516,20 @@ Det luktar svagt i området och ventilationen är igång, men du vet inte vilken
 Det finns ingen tydlig information om att en riskbedömning har gjorts för situationen.
 
 Hur agerar du?
-
+&lt;div class=&quot;choice-row&quot;&gt;
 [[Torkar upp spillet direkt]]
 [[Tar på handskar och försöker rengöra]]
 [[Identifierar kemikalien och kontrollerar säkerhetsdatablad]]
-[[Spärrar av området och kontaktar ansvarig]]</tw-passagedata><tw-passagedata pid="4" name="start" tags="bg1 container ambient-start" position="800,300" size="100,100">&lt;&lt;nobr&gt;&gt;
+[[Spärrar av området och kontaktar ansvarig]]
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="4" name="start" tags="bg1 container ambient-start" position="800,300" size="100,100">&lt;&lt;nobr&gt;&gt;
 Här väljer du var du vill börja, varje del innehåller en specifik risk, men bilderna och filmerna kopplade till risken kan ibland även innehålla andra risker. Kan du se några fler risker? 
 &lt;h2&gt;Risköversikt&lt;/h2&gt;
-&lt;div class=&quot;choice-row&quot;&gt;
+
 &lt;&lt;storyStatus &quot;fall&quot; &quot;Fallrisk&quot;&gt;&gt;
 &lt;&lt;storyStatus &quot;kemikalier&quot; &quot;Kemikalier&quot;&gt;&gt;
 &lt;&lt;finalTest&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;
-&lt;/div&gt;
+
 
 När du har testat appen får du gärna svara på frågorna
 Alla svar är anonyma och hjälper oss att justera utbildningen så den blir så bra som möjligt:
@@ -516,7 +548,7 @@ Står för högt upp på stegen
 Sträcka sig åt sidan för att utföra uppgiften
 Bär verktyg eller material i händerna.
 
-&lt;div class=&quot;choice-row&quot;&gt;[[skylift]] &lt;/div&gt;&lt;div class=&quot;choice-row&quot;&gt;[[trucken]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="trucken" tags="" position="375,300" size="100,100">Sämsta valet!
+&lt;div class=&quot;choice-row&quot;&gt;[[skylift]] [[trucken]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="trucken" tags="" position="375,300" size="100,100">Sämsta valet!
 Personlyft med truck får bara göras om det finns godkänd lyftkorg.
 Arbetsgivaren har ansvaret att anställda har kunskap och ge tillstånd till att köra truck.
 Truckföraren har ansvar att vägra osäkra lyft.
@@ -530,7 +562,7 @@ Fastna mellan pall och hylla
 Få händer eller fötter i kläm vid instabil last
 Personen rör sig på pallen och förskjuter tyngdpunkten
 Begränsad sikt kan resultera i att personen slår i tak, hyllor eller konstruktioner
-&lt;div class=&quot;choice-row&quot;&gt;[[stegen]]&lt;/div&gt;&lt;div class=&quot;choice-row&quot;&gt; [[skylift]]&lt;/div&gt; </tw-passagedata><tw-passagedata pid="7" name="skylift" tags="container bg4" position="425,50" size="100,100">Det bästa valet, men tänk på att du måste ha utbildning och tillstånd för att använda en sky-lift. 
+&lt;div class=&quot;choice-row&quot;&gt;[[stegen]] [[skylift]]&lt;/div&gt; </tw-passagedata><tw-passagedata pid="7" name="skylift" tags="container bg4" position="425,50" size="100,100">Det bästa valet, men tänk på att du måste ha utbildning och tillstånd för att använda en sky-lift. 
 Om något händer:
 Arbetsgivaren kan utredas för arbetsmiljöbrott och få sakntionsavgifter
 Du kan bli avstängd från arbetsuppgifter och i värsta fall personligt straffbar.
@@ -543,7 +575,7 @@ Körning med korgen upplyft, överlast eller att personer klättrar eller lutar 
 Stark vind, elledningar och fordonstrafik där kollition med passerande truckar eller bilar.
 Bristande utbildning.
 
-&lt;div class=&quot;choice-row&quot;&gt;[[stegen]] &lt;/div&gt;&lt;div class=&quot;choice-row&quot;&gt;[[trucken]] &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="risk fall" tags="story:fall story-end ambient-stop" position="200,500" size="100,100">När man gör en riskanalys ska arbetsgivare, skyddsombud och medarbetare som utför arbetsuppgiften delta. Om det finns behov kan man även ta in speciallister inom området.
+&lt;div class=&quot;choice-row&quot;&gt;[[stegen]] [[trucken]] &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="risk fall" tags="story:fall story-end ambient-stop" position="200,500" size="100,100">När man gör en riskanalys ska arbetsgivare, skyddsombud och medarbetare som utför arbetsuppgiften delta. Om det finns behov kan man även ta in speciallister inom området.
 
 Arbetsmiljöverket har lagar och afs:ar som talar om vilka regler som gäller för olika riskfyllda arbeten så som: kemikalier, höjder, buller, vibrationer mm:
 
@@ -576,12 +608,13 @@ Fråga chefen eller ditt skyddsombud om det finns en [[riskanalys|risk kemikalie
 Om det inte finns någon är det viktigt att arbetet stoppas tills riskerna är utredda.
 
 Största riskerna:
-
-Hudkontakt kan orsaka skador
-Inandning av ångor kan vara farligt
-Stänk kan nå ögon
-Okänd kemikalie kan ge oväntade reaktioner
-Spill kan spridas vidare</tw-passagedata><tw-passagedata pid="10" name="Tar på handskar och försöker rengöra" tags="" position="1400,575" size="100,100">Tar på handskar och rengör - Bättre val men intedet bästa!
+&lt;ul&gt;
+&lt;li&gt;Hudkontakt kan orsaka skador&lt;/li&gt;
+&lt;li&gt;Inandning av ångor kan vara farligt&lt;/li&gt;
+&lt;li&gt;Stänk kan nå ögon&lt;/li&gt;
+&lt;li&gt;Okänd kemikalie kan ge oväntade reaktioner&lt;/li&gt;
+&lt;li&gt;Spill kan spridas vidare&lt;/li&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="10" name="Tar på handskar och försöker rengöra" tags="bg7 container" position="1400,575" size="100,100">Tar på handskar och rengör - Bättre val men intedet bästa!
 
 Skyddsutrustning minskar risken, men du vet fortfarande inte vilken kemikalie du hanterar.
 
@@ -593,11 +626,12 @@ Innan arbetet fortsätter behöver du veta vad ämnet är och vilka risker som f
 Fråga chefen eller kontrollera om det finns en [[riskanalys|risk kemikalier]] och säkerhetsdatablad.
 
 Största riskerna:
-
-Fel skyddsutrustning används
-Inandning av farliga ämnen
-Otillräcklig ventilation
-Falsk trygghet vid användning av skydd</tw-passagedata><tw-passagedata pid="11" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="" position="1600,575" size="100,100">Kontrollerar information - Bra val!
+&lt;ul&gt;
+&lt;li&gt;Fel skyddsutrustning används&lt;/li&gt;
+&lt;li&gt;Inandning av farliga ämnen&lt;/li&gt;
+&lt;li&gt;Otillräcklig ventilation&lt;/li&gt;
+&lt;li&gt;Falsk trygghet vid användning av skydd&lt;/li&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="11" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="bg5 container" position="1600,575" size="100,100">Kontrollerar information - Bra val!
 Du tar reda på vilken kemikalie som har spillts genom att kontrollera märkning och säkerhetsdatablad.
 
 Genom att identifiera ämnet kan du förstå vilka risker som finns och hur det ska hanteras på ett säkert sätt.
@@ -605,14 +639,15 @@ Genom att identifiera ämnet kan du förstå vilka risker som finns och hur det 
 En [[riskanalys|risk kemikalier]] hjälper till att avgöra vilka åtgärder som behövs, till exempel rätt skyddsutrustning och hantering av spill.
 
 Detta bör kontrolleras:
+&lt;ul&gt;
+&lt;li&gt;Vilken kemikalie det är&lt;/li&gt;
+&lt;li&gt;Vilka risker ämnet innebär&lt;/li&gt;
+&lt;li&gt;Vilken skyddsutrustning som krävs&lt;/li&gt;
+&lt;li&gt;Hur spillet ska saneras&lt;/li&gt;
+&lt;li&gt;Om ventilationen är tillräcklig&lt;/li&gt;
+&lt;/ul&gt;
 
-Vilken kemikalie det är
-Vilka risker ämnet innebär
-Vilken skyddsutrustning som krävs
-Hur spillet ska saneras
-Om ventilationen är tillräcklig
-
-När du har rätt information kan arbetet utföras på ett säkrare sätt.</tw-passagedata><tw-passagedata pid="12" name="Spärrar av området och kontaktar ansvarig" tags="" position="1775,575" size="100,100">Spärrar av och rapporterar - Bästa valet!
+När du har rätt information kan arbetet utföras på ett säkrare sätt.</tw-passagedata><tw-passagedata pid="12" name="Spärrar av området och kontaktar ansvarig" tags="bg6 container" position="1775,575" size="100,100">Spärrar av och rapporterar - Bästa valet!
 
 Du minskar risken för att fler personer exponeras genom att spärra av området.
 
@@ -622,10 +657,11 @@ Det gör att problemet kan åtgärdas på rätt sätt och att liknande situation
 Arbetet bör inte återupptas förrän riskerna är identifierade och hanterade.
 
 Största riskerna som undviks:
-
-Fler personer utsätts för kemikalien
-Felaktig hantering av spill
-Brist på kontroll över situationen</tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="500,700" size="100,100">&lt;h2&gt;Slutprov&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Fler personer utsätts för kemikalien&lt;/li&gt;
+&lt;li&gt;Felaktig hantering av spill&lt;/li&gt;
+&lt;li&gt;Brist på kontroll över situationen&lt;/li&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="500,700" size="100,100">&lt;h2&gt;Slutprov&lt;/h2&gt;
 
 Detta prov består av 15 frågor. Du får feedback efter varje fråga.
 
