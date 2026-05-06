@@ -261,6 +261,13 @@ h1, h2, h3, h4 {
 .passage a.link-internal:hover {
     filter: brightness(1.2);
 }
+
+#passages ul,
+#passages ol {
+    text-align: left;       /* texten vänsterställd */
+    margin: 0 auto;         /* centrerar själva listblocket */
+    display: inline-block;  /* gör att listan inte tar full bredd */
+}
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">// Globalt ambient-ljudobjekt
 window.ambient = new Audio("audio/ambient.wav");
 window.ambient.loop = true;
@@ -480,7 +487,7 @@ Macro.add("finalTest", {
 });
 </script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="purple"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full" position="800,175" size="100,100">&lt;body class=&quot;full&quot;&gt;
     &lt;header class=&quot;logo-header&quot;&gt;
-        &lt;img src=&quot;img/logga3.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
+        &lt;img src=&quot;img/logga1.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
 
 &lt;h1&gt;Väkommen till ACT SAFE&lt;/h1&gt;
@@ -592,7 +599,7 @@ eller gå in på: https://www.prevent.se/ där finns fler listor beroende på va
 &lt;a href=&quot;#&quot; onclick=&quot;window.open(&#39;https://www.av.se/arbetsmiljoarbete-och-inspektioner/publikationer/foreskrifter/afs-202310/, &#39;avPopup&#39;, &#39;width=1000,height=700&#39;); return false;&quot;&gt;
  
 &lt;/a&gt;
-&lt;div class=&quot;choice-row&quot;&gt;[[START]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="Torkar upp spillet direkt" tags="bg3 container" position="1225,625" size="100,100">Torkar upp direkt - Sämsta valet!
+&lt;div class=&quot;choice-row&quot;&gt;[[START]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="Torkar upp spillet direkt" tags="bg3 container" position="1225,625" size="100,100">&lt;h3&gt;Torkar upp direkt - Sämsta valet!&lt;/h3&gt;
 
 Du hanterar ett spill utan att veta vad ämnet innehåller.
 
@@ -612,7 +619,12 @@ Största riskerna:
 &lt;li&gt;Stänk kan nå ögon&lt;/li&gt;
 &lt;li&gt;Okänd kemikalie kan ge oväntade reaktioner&lt;/li&gt;
 &lt;li&gt;Spill kan spridas vidare&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="10" name="Tar på handskar och försöker rengöra" tags="bg7 container" position="1400,575" size="100,100">Tar på handskar och rengör - Bättre val men intedet bästa!
+&lt;/ul&gt;
+&lt;div class=&quot;choice-row&quot;&gt;
+[[Tar på handskar och försöker rengöra]] 
+[[Identifierar kemikalien och kontrollerar säkerhetsdatablad]] 
+[[Spärrar av området och kontaktar ansvarig]] 
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="10" name="Tar på handskar och försöker rengöra" tags="bg7 container" position="1400,575" size="100,100">&lt;h3&gt;Tar på handskar och rengör - Bättre val men inte det bästa!&lt;/h3&gt;
 
 Skyddsutrustning minskar risken, men du vet fortfarande inte vilken kemikalie du hanterar.
 
@@ -629,7 +641,13 @@ Största riskerna:
 &lt;li&gt;Inandning av farliga ämnen&lt;/li&gt;
 &lt;li&gt;Otillräcklig ventilation&lt;/li&gt;
 &lt;li&gt;Falsk trygghet vid användning av skydd&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="11" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="bg5 container" position="1600,575" size="100,100">Kontrollerar information - Bra val!
+&lt;/ul&gt;
+&lt;div class=&quot;choice-row&quot;&gt;
+[[Torkar upp spillet direkt]] 
+[[Identifierar kemikalien och kontrollerar säkerhetsdatablad]] 
+[[Spärrar av området och kontaktar ansvarig]] 
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="11" name="Identifierar kemikalien och kontrollerar säkerhetsdatablad" tags="bg5 container" position="1600,575" size="100,100">&lt;h3&gt;Kontrollerar information - Bra val!&lt;/h3&gt;
+
 Du tar reda på vilken kemikalie som har spillts genom att kontrollera märkning och säkerhetsdatablad.
 
 Genom att identifiera ämnet kan du förstå vilka risker som finns och hur det ska hanteras på ett säkert sätt.
@@ -645,7 +663,12 @@ Detta bör kontrolleras:
 &lt;li&gt;Om ventilationen är tillräcklig&lt;/li&gt;
 &lt;/ul&gt;
 
-När du har rätt information kan arbetet utföras på ett säkrare sätt.</tw-passagedata><tw-passagedata pid="12" name="Spärrar av området och kontaktar ansvarig" tags="bg6 container" position="1775,575" size="100,100">Spärrar av och rapporterar - Bästa valet!
+När du har rätt information kan arbetet utföras på ett säkrare sätt.
+&lt;div class=&quot;choice-row&quot;&gt;
+[[Torkar upp spillet direkt]] 
+[[Tar på handskar och försöker rengöra]] 
+[[Spärrar av området och kontaktar ansvarig]] 
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="12" name="Spärrar av området och kontaktar ansvarig" tags="bg6 container" position="1775,575" size="100,100">&lt;h3&gt;Spärrar av och rapporterar - Bästa valet!&lt;/h3&gt;
 
 Du minskar risken för att fler personer exponeras genom att spärra av området.
 
@@ -659,7 +682,12 @@ Största riskerna som undviks:
 &lt;li&gt;Fler personer utsätts för kemikalien&lt;/li&gt;
 &lt;li&gt;Felaktig hantering av spill&lt;/li&gt;
 &lt;li&gt;Brist på kontroll över situationen&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="500,700" size="100,100">&lt;h2&gt;Slutprov&lt;/h2&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;choice-row&quot;&gt;
+[[Torkar upp spillet direkt]] 
+[[Tar på handskar och försöker rengöra]] 
+[[Identifierar kemikalien och kontrollerar säkerhetsdatablad]] 
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="500,700" size="100,100">&lt;h2&gt;Slutprov&lt;/h2&gt;
 
 Detta prov består av 15 frågor. Du får feedback efter varje fråga.
 
@@ -700,7 +728,9 @@ Du fick **$score av 15 poäng**.
     &lt;h3&gt;Underkänt – försök igen&lt;/h3&gt;
     &lt;&lt;button &quot;Gör om provet&quot;&gt;&gt;&lt;&lt;goto &quot;prov&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;&lt;/if&gt;&gt;
-</tw-passagedata><tw-passagedata pid="16" name="risk kemikalier" tags="story:kemikalier story-end ambient-stop" position="1225,850" size="100,100">När man gör en riskanalys ska arbetsgivare, skyddsombud och medarbetare som utför arbetsuppgiften delta. Om det finns behov kan man även ta in speciallister inom området.
+</tw-passagedata><tw-passagedata pid="16" name="risk kemikalier" tags="story:kemikalier story-end ambient-stop" position="1225,850" size="100,100">&lt;h3&gt;Riskanalys&lt;/h3&gt;
+
+När man gör en riskanalys ska arbetsgivare, skyddsombud och medarbetare som utför arbetsuppgiften delta. Om det finns behov kan man även ta in speciallister inom området.
 
 Arbetsmiljöverket har lagar och afs:ar som talar om vilka regler som gäller för olika riskfyllda arbeten så som: kemikalier, höjder, buller, vibrationer mm:
 
