@@ -525,15 +525,28 @@ Macro.add("storyStatus", {
     }
 });
 
+
+// === ActSafe provsystem ===
+// Initiera variabler när spelet startar
+$(document).one(':storyinit', function () {
+    State.variables.score = 0;
+    console.log("[ActSafe] Poäng initierad:", State.variables.score);
+});
+
 /* ============================
-   SLUTPROV-MAKRO
+   SLUTPROV‑MAKRO (uppdaterad)
 ============================ */
 Macro.add("finalTest", {
     handler: function () {
         const required = ["fall", "kemikalier"];
         const allDone = required.every(id => window.getStoryStatus(id) === "completed");
 
+        console.log("[ActSafe] Kontroll av slutprov:", required, "Alla klara:", allDone);
+
         if (allDone) {
+            State.variables.score = 0;
+            console.log("[ActSafe] Poäng nollställd inför slutprov.");
+
             const html = `
                 <div class="story-status status-completed">
                     <a href="javascript:void(0)" onclick="SugarCube.Engine.play('prov')">
@@ -543,10 +556,42 @@ Macro.add("finalTest", {
             `;
             $(this.output).append($(html));
         } else {
-            $(this.output).append("<p>Slutprovet låses upp när alla delar är klara.</p>");
+            const html = `
+                <div class="story-status status-locked">
+                    <button disabled>🔒 Slutprov (låst)</button>
+                </div>
+                <p>Slutprovet låses upp när alla delar är klara.</p>
+            `;
+            $(this.output).append($(html));
         }
     }
 });
+
+// === Skapa och blanda svar ===
+setup.createQuestion = function(answers) {
+    const shuffled = [...answers].sort(() => Math.random() - 0.5);
+    console.log("[ActSafe] Fråga skapad:", shuffled);
+    return shuffled;
+};
+
+// === Kontrollera svar ===
+setup.checkAnswer = function(isCorrect) {
+  console.log("iscorrect" + isCorrect);
+    if (isCorrect) {
+        State.variables.score += 1;
+        console.log("[ActSafe] Rätt svar! Ny poäng:", State.variables.score);
+    } else {
+        console.log("[ActSafe] Fel svar. Poängen kvar:", State.variables.score);
+    }
+};
+
+// === Återställ provet ===
+setup.resetQuiz = function() {
+    State.variables.score = 0;
+    console.log("[ActSafe] Provet återställt. Poäng:", State.variables.score);
+};
+
+
 </script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="red"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-tag name="ambientButton" color="purple"></tw-tag><tw-tag name="bg8" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full ambient-start" position="800,175" size="100,100">  &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga1.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
@@ -754,48 +799,57 @@ Största riskerna som undviks:
 [[Tar på handskar och försöker rengöra]] 
 [[Identifierar kemikalien och kontrollerar säkerhetsdatablad]] 
 [[START]] 
-&lt;/div&gt; </tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="500,700" size="100,100">&lt;h2&gt;Slutprov&lt;/h2&gt;
-
-Detta prov består av 15 frågor. Du får feedback efter varje fråga.
-
-&lt;&lt;set $score = 0&gt;&gt;
-&lt;&lt;set $q = 1&gt;&gt;
-
+&lt;/div&gt; </tw-passagedata><tw-passagedata pid="13" name="prov" tags="notebox story:prov" position="825,575" size="100,100">&lt;&lt;run setup.resetQuiz()&gt;&gt;
+&lt;h2&gt;Välkommen till ActSafe‑provet&lt;/h2&gt;
 &lt;&lt;button &quot;Starta provet&quot;&gt;&gt;&lt;&lt;goto &quot;Q1&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
-</tw-passagedata><tw-passagedata pid="14" name="Q1" tags="" position="650,700" size="100,100">
-&lt;&lt;set $answers = [
+
+</tw-passagedata><tw-passagedata pid="14" name="Q1" tags="" position="650,700" size="100,100">&lt;&lt;run _answers = [
     {text: &quot;Arbetsgivaren&quot;, correct: true},
     {text: &quot;Arbetstagaren&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
-Fråga 1/15  
+Fråga 1/15  
 Vem har huvudansvaret för att arbetsmiljön är säker?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Arbetsgivaren&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F1R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F1W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-
-
-</tw-passagedata><tw-passagedata pid="15" name="Resultat" tags="story:prov story-end" position="650,2200" size="100,100">&lt;h2&gt;Resultat&lt;/h2&gt;
-
+    
+    &lt;&lt;button &quot;Arbetstagaren&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F1W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Arbetstagaren&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F1W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Arbetsgivaren&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F1R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+    
+    
+</tw-passagedata><tw-passagedata pid="15" name="Resultat" tags="story:prov story-end" position="425,1100" size="100,100">&lt;h2&gt;Resultat&lt;/h2&gt;
 Du fick **$score av 15 poäng**.
 
 &lt;&lt;if $score &gt;= 12&gt;&gt;
     &lt;h3&gt;Godkänt! Bra jobbat!&lt;/h3&gt;
 &lt;&lt;else&gt;&gt;
     &lt;h3&gt;Underkänt – försök igen&lt;/h3&gt;
-    &lt;&lt;button &quot;Gör om provet&quot;&gt;&gt;&lt;&lt;goto &quot;prov&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;Gör om provet&quot;&gt;&gt;
+        &lt;&lt;run setup.resetQuiz()&gt;&gt;
+        &lt;&lt;goto &quot;START&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
 &lt;&lt;/if&gt;&gt;
-[[START]] </tw-passagedata><tw-passagedata pid="16" name="risk kemikalier" tags="story:kemikalier story-end ambient-stop" position="1225,850" size="100,100">&lt;h3&gt;Riskanalys&lt;/h3&gt;
+</tw-passagedata><tw-passagedata pid="16" name="risk kemikalier" tags="story:kemikalier story-end ambient-stop" position="1225,850" size="100,100">&lt;h3&gt;Riskanalys&lt;/h3&gt;
 
 När man gör en riskanalys ska arbetsgivare, skyddsombud och medarbetare som utför arbetsuppgiften delta. Om det finns behov kan man även ta in speciallister inom området.
 
@@ -817,365 +871,616 @@ eller gå in på: https://www.prevent.se/ där finns fler listor beroende på va
  
 &lt;/a&gt;
 &lt;div class=&quot;choice-row&quot;&gt;[[START]]&lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="17" name="F1R" tags="" position="775,700" size="100,100">Rätt! Arbetsgivaren har huvudansvaret.
-&lt;&lt;goto &quot;Q2&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="18" name="F1W" tags="" position="900,700" size="100,100">Inte riktigt. Arbetsgivaren har huvudansvaret.
-&lt;&lt;goto &quot;Q2&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="Q2" tags="" position="650,800" size="100,100">&lt;&lt;set $answers = [
+</tw-passagedata><tw-passagedata pid="17" name="F1R" tags="" position="775,700" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Arbetsgivaren har huvudansvaret.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q2&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="18" name="F1W" tags="" position="900,700" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Arbetsgivaren huvuvdansvaret för arbetsmiljön. 
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q2&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="19" name="Q2" tags="" position="650,800" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Följa rutiner och rapportera brister&quot;, correct: true},
     {text: &quot;Bestämma skyddsutrustning&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 2/15  
 Vad är arbetstagarens ansvar?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Följa rutiner och rapportera brister&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F2R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F2W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="20" name="F2R" tags="" position="775,800" size="100,100">Rätt! Arbetstagaren ska följa rutiner och rapportera brister.
-&lt;&lt;goto &quot;Q3&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="21" name="F2W" tags="" position="900,800" size="100,100">Inte riktigt. Arbetstagaren ska följa rutiner och rapportera brister.
-&lt;&lt;goto &quot;Q3&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="22" name="Q3" tags="" position="650,900" size="100,100">&lt;&lt;set $answers = [
+    
+    &lt;&lt;button &quot;Bestämma skyddsutrustning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F2W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Bestämma skyddsutrustning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F2W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Följa rutiner och rapportera brister&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F2R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="F2R" tags="" position="775,800" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Arbetstagaren ska följa rutiner och rapportera brister.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q3&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="21" name="F2W" tags="" position="900,800" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Arbetstagaren ska följa rutiner och rapportera brister.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q3&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="22" name="Q3" tags="" position="650,900" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Alla som upptäcker tillbudet&quot;, correct: true},
     {text: &quot;Endast chefen&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 3/15  
 Vem ska rapportera tillbud?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Alla som upptäcker tillbudet&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F3R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F3W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="23" name="F3R" tags="" position="775,900" size="100,100">
-Rätt! Alla ska rapportera tillbud.
-&lt;&lt;goto &quot;Q4&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="24" name="Q4" tags="" position="650,1000" size="100,100">&lt;&lt;set $answers = [
+    
+    &lt;&lt;button &quot;Endast chefen&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F3W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Endast chefen&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F3W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Alla som upptäcker tillbudet&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F3R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="F3R" tags="" position="775,900" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Alla ska rapportera tillbud.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q4&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="24" name="Q4" tags="" position="650,1000" size="100,100">&lt;&lt;run _answers = [
     {text: &quot;Kontrollera att arbetsmiljöregler följs&quot;, correct: true},
     {text: &quot;Bestämma arbetstider&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 4/15  
 Vad är ett skyddsombuds uppgift?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Kontrollera att arbetsmiljregler följs&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F4R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F4W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="25" name="F4R" tags="" position="775,1000" size="100,100">
-Rätt! Skyddsombudet bevakar arbetsmiljön.
-&lt;&lt;goto &quot;Q5&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Bestämma arbetstider&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F4W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Bestämma arbetstider&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F4W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Kontrollera att arbetsmiljöregler följs&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F4R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="F4R" tags="" position="775,1000" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Skyddsombudet bevakar arbetsmiljön.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q5&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="26" name="F4W" tags="" position="900,1000" size="100,100">Inte riktigt. Skyddsombudet bevakar arbetsmiljön.
 &lt;&lt;goto &quot;Q5&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="27" name="F3W" tags="" position="900,900" size="100,100">Inte riktigt. Alla ska rapportera tillbud.
-&lt;&lt;goto &quot;Q4&quot;&gt;&gt;
+&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt;Skyddsombudet bevakar arbetsmiljön.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q5&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="27" name="F3W" tags="" position="900,900" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Alla ska rapportera tillbud.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q4&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="28" name="Q5" tags="" position="650,1100" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Göra en riskbedömning&quot;, correct: true},
     {text: &quot;Ingenting&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 5/15  
 Vad ska arbetsgivaren göra innan en ny arbetsuppgift införs?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Göra en riskbedömning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F5R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F5W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="29" name="F5R" tags="" position="775,1100" size="100,100">Rätt! Riskbedömning ska alltid göras.
-&lt;&lt;goto &quot;Q6&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Ingenting&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F5W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Ingenting&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F5W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Göra en riskbedömning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F5R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+
+</tw-passagedata><tw-passagedata pid="29" name="F5R" tags="" position="775,1100" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Riskbedömning ska alltid göras.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q6&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="30" name="F5W" tags="" position="900,1100" size="100,100">
 Inte riktigt. Riskbedömning ska alltid göras.
 &lt;&lt;goto &quot;Q6&quot;&gt;&gt;
 
-</tw-passagedata><tw-passagedata pid="31" name="Q6" tags="" position="650,1200" size="100,100">&lt;&lt;set $answers = [
+&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt;Riskbedömning ska alltid göras.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q6&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="31" name="Q6" tags="" position="650,1200" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Oordning och hinder i gångvägar&quot;, correct: true},
     {text: &quot;Fel skor&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 6/15  
 Vad är den vanligaste orsaken till fallolyckor?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Oordning och hinder i gångvägar&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F6R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F6W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="32" name="F6W" tags="" position="900,1200" size="100,100">Rätt! Oordning är en vanlig orsak.
+    
+    &lt;&lt;button &quot;Fel skor&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F6W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Fel skor&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F6W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Oordning och hinder i gångvägar&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F6R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="32" name="F6W" tags="" position="900,1200" size="100,100">Inte riktigt. Oordning är en vanlig orsak.
 &lt;&lt;goto &quot;Q7&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="33" name="F6R" tags="" position="775,1200" size="100,100">Inte riktigt. Oordning är en vanlig orsak.
-&lt;&lt;goto &quot;Q7&quot;&gt;&gt;
+&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt;Oordning är en vanlig orsak.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q7&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="33" name="F6R" tags="" position="775,1200" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Oordning är en vanlig orsak.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q7&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="34" name="Q7" tags="" position="650,1300" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Vid arbete över 2 meter&quot;, correct: true},
     {text: &quot;Vid arbete över 1 meter&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 7/15  
 När måste fallskydd användas?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Vid arbete över 2 meter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F7R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F7W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="35" name="F7R" tags="" position="775,1300" size="100,100">Rätt! Fallskydd krävs över 2 meter.
-&lt;&lt;goto &quot;Q8&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="36" name="F7W" tags="" position="900,1300" size="100,100">Inte riktigt. Fallskydd krävs över 2 meter.
-&lt;&lt;goto &quot;Q8&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Vid arbete över 1 meter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F7W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Vid arbete över 1 meter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F7W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Vid arbete över 2 meter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F7R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="35" name="F7R" tags="" position="775,1300" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Fallskydd krävs över 2 meter.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q8&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="36" name="F7W" tags="" position="900,1300" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Fallskydd krävs över 2 meter.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q8&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="37" name="Q8" tags="" position="650,1400" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Någon halkar men skadar sig inte&quot;, correct: true},
     {text: &quot;Någon tar rast&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 8/15  
 Vad är ett tillbud vid fallrisk?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Någon halkar men skadar sig inte&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F8R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F8W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="38" name="F8W" tags="" position="900,1400" size="100,100">
-Inte riktigt. Ett tillbud är en händelse utan skada.
-&lt;&lt;goto &quot;Q9&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="39" name="F8R" tags="" position="775,1400" size="100,100">
-Rätt! Ett tillbud är en händelse utan skada.
-&lt;&lt;goto &quot;Q9&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="40" name="F9R" tags="" position="775,1500" size="100,100">Rätt! Trasig utrustning ska tas ur bruk.
-&lt;&lt;goto &quot;Q10&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="41" name="F9W" tags="" position="900,1500" size="100,100">
-Inte riktigt. Trasig utrustning ska tas ur bruk.
-&lt;&lt;goto &quot;Q10&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="42" name="Q9" tags="" position="650,1500" size="100,100">&lt;&lt;set $answers = [
+    
+    &lt;&lt;button &quot;Någon tar rast&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F8W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Någon tar rast&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F8W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Någon halkar men skadar sig inte&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F8R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="38" name="F8W" tags="" position="900,1400" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Ett tillbud är en händelse utan skada.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q9&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="39" name="F8R" tags="" position="775,1400" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Ett tillbud är en händelse utan skada.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q9&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="40" name="F9R" tags="" position="775,1500" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Trasig utrustning ska tas ur bruk.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q10&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="41" name="F9W" tags="" position="900,1500" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Trasig utrustning ska tas ur bruk.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q10&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="42" name="Q9" tags="" position="650,1500" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Rapportera och ta den ur bruk&quot;, correct: true},
     {text: &quot;Använda den försiktigt&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 9/15  
 Vad ska du göra om du upptäcker en trasig stege?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Rapportera och ta den ur bruk&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F9R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F9W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="43" name="F10R" tags="" position="775,1600" size="100,100">
-Rätt! Fallskydd och utbildning är avgörande.
-&lt;&lt;goto &quot;Q11&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="44" name="F10W" tags="" position="900,1600" size="100,100">
-Inte riktigt. Fallskydd och utbildning är avgörande.
-&lt;&lt;goto &quot;Q11&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Använda den försiktigt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F9W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Använda den försiktigt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F9W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Rapportera och ta den ur bruk&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F9R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="43" name="F10R" tags="" position="775,1600" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Fallskydd och utbildning är avgörande.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q11&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="44" name="F10W" tags="" position="900,1600" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Fallskydd och utbildning är avgörande.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q11&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="45" name="Q10" tags="" position="650,1600" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Rätt fallskydd och utbildning&quot;, correct: true},
     {text: &quot;Jobba snabbt&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 10/15  
 Vad är viktigt vid arbete på höjd?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Rätt fallskydd och utbildning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F10R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F10W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="46" name="Q11" tags="" position="650,1700" size="100,100">&lt;&lt;set $answers = [
+    
+    &lt;&lt;button &quot;Jobba snabbt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F10W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Jobba snabbt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F10W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Rätt fallskydd och utbildning&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F10R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="46" name="Q11" tags="" position="650,1700" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Läsa säkerhetsdatabladet&quot;, correct: true},
     {text: &quot;Skaka flaskan&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 11/15  
 Vad ska du göra innan du använder en kemikalie?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Läsa säkerhetsdatabladet&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F11R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F11W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="47" name="F11W" tags="" position="900,1700" size="100,100">
-Inte riktigt. Säkerhetsdatabladet är alltid första steget.
-&lt;&lt;goto &quot;Q12&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="48" name="F11R" tags="" position="775,1700" size="100,100">Rätt! Säkerhetsdatabladet är alltid första steget.
-&lt;&lt;goto &quot;Q12&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="49" name="F12R" tags="" position="775,1800" size="100,100">
-Rätt! Dödskalle = giftigt.
-&lt;&lt;goto &quot;Q13&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="50" name="F12W" tags="" position="900,1800" size="100,100">
-Inte riktigt. Dödskalle = giftigt.
-&lt;&lt;goto &quot;Q13&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Skaka flaskan&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F11W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Skaka flaskan&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F11W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Läsa säkerhetsdatabladet&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F11R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="47" name="F11W" tags="" position="900,1700" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Säkerhetsdatabladet är alltid första steget.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q12&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="48" name="F11R" tags="" position="775,1700" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Säkerhetsdatabladet är alltid första steget.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q12&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="49" name="F12R" tags="" position="775,1800" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Dödskalle=Giftigt
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q13&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="50" name="F12W" tags="" position="900,1800" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt;Dödskalle= giftigt.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q13&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="51" name="Q12" tags="" position="650,1800" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run _answers = [
     {text: &quot;Giftigt&quot;, correct: true},
     {text: &quot;Brandfarligt&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 12/15  
 Vad betyder faropiktogrammet med dödskalle?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Giftigt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F12R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F12W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="52" name="F13R" tags="" position="775,1900" size="100,100">
-Rätt! Följ rutiner och rapportera.
-&lt;&lt;goto &quot;Q14&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="53" name="F13W" tags="" position="900,1900" size="100,100">:: F13W
-Inte riktigt. Följ rutiner och rapportera.
-&lt;&lt;goto &quot;Q14&quot;&gt;&gt;
-</tw-passagedata><tw-passagedata pid="54" name="Q13" tags="" position="650,1900" size="100,100">&lt;&lt;set $answers = [
+    
+    &lt;&lt;button &quot;Brandfarligt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F12W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Brandfarligt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F12W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Giftigt&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F12R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+
+
+</tw-passagedata><tw-passagedata pid="52" name="F13R" tags="" position="775,1900" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Följ rutiner och rapportera.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q14&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="53" name="F13W" tags="" position="900,1900" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Följ rutiner och rapportera.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q14&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+</tw-passagedata><tw-passagedata pid="54" name="Q13" tags="" position="650,1900" size="100,100">&lt;&lt;run  _answers = [
     {text: &quot;Följa spillrutiner och rapportera&quot;, correct: true},
     {text: &quot;Låtsas som ingenting&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 13/15  
 Vad ska du göra om du spiller en farlig kemikalie?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Följa spillrutiner och rapportera&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F13R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F13W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
+    
+    &lt;&lt;button &quot;Låtsas som ingenting&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F13W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Låtsas som ingenting&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F13W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Följa spillrutiner och rapportera&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F13R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+
+
 </tw-passagedata><tw-passagedata pid="55" name="Q14" tags="" position="650,2000" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Den ska användas enligt instruktion&quot;, correct: true},
     {text: &quot;Den är frivillig&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 14/15  
 Vad är rätt om personlig skyddsutrustning vid kemikalier?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Den ska användas enligt instruktion&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
             &lt;&lt;goto &quot;F14R&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;F14W&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="56" name="F14R" tags="" position="775,2000" size="100,100">
-Rätt! Skyddsutrustning är obligatorisk.
-&lt;&lt;goto &quot;Q15&quot;&gt;&gt;
+    
+    &lt;&lt;button &quot;Den är frivillig&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F14W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Den är frivillig&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F14W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Den ska användas enligt instruktion&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F14R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="56" name="F14R" tags="" position="775,2000" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt; Skyddsutrustning är obligatorisk.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q15&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="57" name="F14W" tags="" position="900,2000" size="100,100">
 Inte riktigt. Skyddsutrustning är obligatorisk.
 &lt;&lt;goto &quot;Q15&quot;&gt;&gt;
+&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt; Skyddsutrustning är obligatorisk.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Nästa fråga&quot;&gt;&gt;&lt;&lt;goto &quot;Q15&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata><tw-passagedata pid="58" name="Q15" tags="" position="650,2100" size="100,100">
-&lt;&lt;set $answers = [
+&lt;&lt;run  _answers = [
     {text: &quot;Skölja i minst 15 minuter&quot;, correct: true},
     {text: &quot;Vänta och se&quot;, correct: false}
 ]&gt;&gt;
 
-&lt;&lt;set $shuffled = $answers.shuffle()&gt;&gt;
+&lt;&lt;run  _shuffled = setup.createQuestion(_answers)&gt;&gt;
 
 Fråga 15/15  
 Vad ska du göra om du får kemikalie i ögat?
 
-&lt;&lt;for _a range $shuffled&gt;&gt;
-    &lt;&lt;button _a.text&gt;&gt;
-        &lt;&lt;if _a.correct&gt;&gt;
-            &lt;&lt;set $score += 1&gt;&gt;
-            &lt;&lt;goto &quot;Resultat&quot;&gt;&gt;
-        &lt;&lt;else&gt;&gt;
-            &lt;&lt;goto &quot;Resultat&quot;&gt;&gt;
-        &lt;&lt;/if&gt;&gt;
+&lt;&lt;if _shuffled[0].correct&gt;&gt;
+	&lt;&lt;button  &quot;Skölja i minst 15 minuter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F15R&quot;&gt;&gt;
     &lt;&lt;/button&gt;&gt;
-&lt;&lt;/for&gt;&gt;
-</tw-passagedata><tw-passagedata pid="59" name="Frågeformulär" tags="" position="800,425" size="100,100">Denna länken går till ett google.forms. 
+    
+    &lt;&lt;button &quot;Vänta och se&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F15W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+ &lt;&lt;else&gt;&gt;
+      &lt;&lt;button &quot;Vänta och se&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(false)&gt;&gt;
+            &lt;&lt;goto &quot;F15W&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button  &quot;Skölja i minst 15 minuter&quot;&gt;&gt;
+        &lt;&lt;run setup.checkAnswer(true)&gt;&gt;
+            &lt;&lt;goto &quot;F15R&quot;&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+ &lt;&lt;/if&gt;&gt;
+</tw-passagedata><tw-passagedata pid="59" name="Frågeformulär" tags="" position="850,450" size="100,100">Denna länken går till ett google.forms. 
 Alla svar är anonyma.
 Dina svar hjälper oss att utveckla vår prototyp så att den bäst anpassas efter behov och användarens önskemål. Det är inte en färdig produkt, därav enbart två risk-scenarier.
 Bilder och filmer som används i prototypen är inte fullt bearbetade, enbart där för att skapa en uppfattning om hur materialet kommer att presenteras i en färdig version.
@@ -1194,6 +1499,17 @@ Bilder och filmer som används i prototypen är inte fullt bearbetade, enbart d�
 
 
 
+</tw-passagedata><tw-passagedata pid="62" name="F15R" tags="" position="775,2100" size="100,100">&lt;div class=&quot;feedback correct&quot;&gt;
+    😊 &lt;strong&gt;Rätt!&lt;/strong&gt;Du ska skölja ögonen minst 15 minuter och uppsöka vård vid behov.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Visa resultat&quot;&gt;&gt;&lt;&lt;goto &quot;Resultat&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
+
+</tw-passagedata><tw-passagedata pid="63" name="F15W" tags="" position="900,2100" size="100,100">&lt;div class=&quot;feedback wrong&quot;&gt;
+    😞 &lt;strong&gt;Fel!&lt;/strong&gt;Du ska skölja ögonen minst 15 minuter och uppsöka vård vid behov.
+&lt;/div&gt;
+
+&lt;&lt;link &quot;Visa resultat&quot;&gt;&gt;&lt;&lt;goto &quot;Resultat&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 </tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
