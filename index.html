@@ -293,6 +293,52 @@ LOGGAN I MITTEN
     max-width: 80%;
     height: auto;
 }
+
+.start-image {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.start-image img {
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+
+    /* Loggan lite mindre */
+    .logo-header .logo {
+        max-width: 65%;
+    }
+
+    /* Startbilden anpassas */
+    .start-image img {
+        max-width: 90%;
+    }
+
+    /* Story-status-knapparna */
+    .story-status {
+        width: 200px;
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+
+    /* Rubriker och text */
+    h1 {
+        font-size: 24px;
+        text-align: center;
+        margin: 15px 0;
+    }
+
+    .passage {
+        font-size: 16px;
+        line-height: 1.5;
+        padding: 0 10px;
+    }
+}
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">/* ============================
    AMBIENT AUDIO (GLOBAL TOGGLE)
 ============================ */
@@ -371,7 +417,9 @@ window.sceneMedia = {
     "bg6":  { type: "image", url: "img/kontakta.png" },
     "bg7":  { type: "image", url: "img/handskar.png" },
     "bg8": { type: "image", url: "img/trucklyft.png"},
-    "vid1": { type: "video", url: "video/fallstege.mp4" }
+    "bg9": { type: "image", url: "img/katastrof.png"},
+    "vid1": { type: "video", url: "video/falletstegen.mp4" },
+    "vid2": { type: "video", url: "video/falltrucken.mp4"}
 };
 
 /* ============================
@@ -592,9 +640,10 @@ setup.resetQuiz = function() {
 };
 
 
-</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="red"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-tag name="ambientButton" color="purple"></tw-tag><tw-tag name="bg8" color="blue"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="full ambient-start" position="800,175" size="100,100">  &lt;header class=&quot;logo-header&quot;&gt;
+</script><tw-tag name="bg1" color="blue"></tw-tag><tw-tag name="full" color="green"></tw-tag><tw-tag name="container" color="green"></tw-tag><tw-tag name="vid1" color="red"></tw-tag><tw-tag name="story:fallrisk" color="yellow"></tw-tag><tw-tag name="bg2" color="blue"></tw-tag><tw-tag name="widget" color="red"></tw-tag><tw-tag name="story:fall" color="green"></tw-tag><tw-tag name="story:end" color="blue"></tw-tag><tw-tag name="story:kemikalier" color="red"></tw-tag><tw-tag name="bg3" color="blue"></tw-tag><tw-tag name="notebox" color="orange"></tw-tag><tw-tag name="story:prov" color="red"></tw-tag><tw-tag name="story-end" color="blue"></tw-tag><tw-tag name="ambient-start" color="blue"></tw-tag><tw-tag name="ambient-stop" color="yellow"></tw-tag><tw-tag name="bg4" color="blue"></tw-tag><tw-tag name="bg7" color="blue"></tw-tag><tw-tag name="bg5" color="blue"></tw-tag><tw-tag name="bg6" color="blue"></tw-tag><tw-tag name="ambientButton" color="purple"></tw-tag><tw-tag name="bg8" color="blue"></tw-tag><tw-tag name="bg9" color="blue"></tw-tag><tw-tag name="vid2" color="red"></tw-tag><tw-passagedata pid="1" name="Introduktion" tags="ambient-start" position="800,175" size="100,100">  &lt;header class=&quot;logo-header&quot;&gt;
         &lt;img src=&quot;img/logga1.png&quot; alt=&quot;ActSafe logga&quot; class=&quot;logo&quot;&gt;
     &lt;/header&gt;
+    &lt;div class=&quot;start-image&quot;&gt; &lt;img src=&quot;img/katastrof.png&quot; alt=&quot;Katastrof&quot;&gt;&lt;/div&gt;
 &lt;div id=&quot;ambientButtonContainer&quot;&gt;
     &lt;button id=&quot;ambientToggleBtn1&quot;&gt;🔊 Ljud på&lt;/button&gt;
 &lt;/div&gt;
@@ -661,7 +710,7 @@ Står för högt upp på stegen
 Sträcka sig åt sidan för att utföra uppgiften
 Bär verktyg eller material i händerna.
 
-&lt;div class=&quot;choice-row&quot;&gt;[[skylift]] [[trucken]] [[START]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="trucken" tags="bg8 container" position="375,300" size="100,100">Sämsta valet!
+&lt;div class=&quot;choice-row&quot;&gt;[[skylift]] [[trucken]] [[START]]&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="trucken" tags="container vid2" position="375,300" size="100,100">Sämsta valet!
 Personlyft med truck får bara göras om det finns godkänd lyftkorg.
 Arbetsgivaren har ansvaret att anställda har kunskap och ge tillstånd till att köra truck.
 Truckföraren har ansvar att vägra osäkra lyft.
